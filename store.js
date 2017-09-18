@@ -1,30 +1,37 @@
-function Store(storeID, initCallback){
+function DPDStore(storeID, initCallback){
 	this.storeID = storeID;
 	this.isInitialized = false; //this is true after the store is successfully initialized
 	this.items = []; //this will be generated for the store after connecting
 	this.initCallback = initCallback; //if set, will be called after the store is initialized
 	
-	this.newItemListener;
-	this.updatedItemListener;
-	this.deletedItemListener;
+	//FIXME: multiple listeners should be possible
+	this.newListener;
+	this.updatedListener;
+	this.deletedListener;
 }
 
 /*
  * Listener function requires one parameter for the submitted object
  */
-Store.prototype.setNewListener = function(listener){
-	this.newItemListener = listener;
+DPDStore.prototype.setNewListener = function(listener){
+	this.newListener = listener;
 }
 
-Store.prototype.setUpdatedListener = function(listener){
-	this.updatedItemListener = listener;
+/*
+ * Listener function requires one parameter for the submitted object
+ */
+DPDStore.prototype.setUpdatedListener = function(listener){
+	this.updatedListener = listener;
 }
 
-Store.prototype.setDeletedListener = function(listener){
-	this.deletedItemListener = listener;
+/*
+ * Listener function requires one parameter for the submitted object
+ */
+DPDStore.prototype.setDeletedListener = function(listener){
+	this.deletedListener = listener;
 }
 
-Store.prototype.connect = function(){
+DPDStore.prototype.connect = function(){
 	var self = this;
 	dpd[this.storeID].get(function(itemList, error) { //Use dpd.js to access the API
 
@@ -41,10 +48,10 @@ Store.prototype.connect = function(){
 	
 };
 
-Store.prototype.getByID = function(id){
+DPDStore.prototype.getByID = function(id){
 	
 	if (!this.isInitialized) {
-		console.log('Error: Store ' + this.storeID + ' is not initialized yet.');
+		console.log('Error: DPDStore ' + this.storeID + ' is not initialized yet.');
 		return;
 	}
 	
@@ -55,38 +62,35 @@ Store.prototype.getByID = function(id){
 	}
 };
 
-Store.prototype.afterInit = function(){
+DPDStore.prototype.afterInit = function(){
 		var self = this;
 
 	dpd[this.storeID].on('update', function(item) {
-		console.log('update: ' + this.storeID + ' ID: ' + item.id);
-		this.items[item.id] = item;
-		
-		if (jQuery.isFunction(self.updatedItemListener)){
-			self.updatedItemListener(item);
-		}
-		
+		console.log('update: ' + self.storeID + ' ID: ' + item.id);
+		self.items[item.id] = item;
+		if (jQuery.isFunction(self.updatedListener)){
+			console.log('informed updated listener');
+			self.updatedListener(item);
+		}	
 	});
 	
 	dpd[this.storeID].on('delete', function(item) {
-		console.log('delete: ' + this.storeID + ' ID: ' + item.id);
+		console.log('delete: ' + self.storeID + ' ID: ' + item.id);
 		//FIXME: this is very resource hungry, since our arrays indexes are not in sequential order it has to do for now
-		arr.splice($.inArray(item, arr),1);
-		
-		if (jQuery.isFunction(self.deletedItemListener)){
-			self.deletedItemListener(item);
+		self.items.splice($.inArray(item, self.items),1);
+		if (jQuery.isFunction(self.deletedListener)){
+			console.log('informed delete listener');
+			self.deletedListener(item);
 		}
-		
 	});
 	
 	dpd[this.storeID].on('new', function(item) {
-		console.log('new: ' + this.storeID + ' ID: ' + item.id);
-		this.items[item.id] = item;
-		
-		if (jQuery.isFunction(self.newItemListener)){
-			self.newItemListener(item);
+		console.log('new: ' + self.storeID + ' ID: ' + item.id);
+		self.items[item.id] = item;
+		if (jQuery.isFunction(self.newListener)){
+			console.log('informed new listener');
+			self.newListener(item);
 		}
-		
 	});
 	
 	console.log(this.storeID + ' finished initializing');
