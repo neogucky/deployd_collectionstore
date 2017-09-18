@@ -6,8 +6,8 @@ function DPDStore(storeID, initCallback){
 	
 	//FIXME: multiple listeners should be possible
 	this.newListener;
-	this.updatedListener;
-	this.deletedListener;
+	this.updateListener;
+	this.deleteListener;
 }
 
 /*
@@ -20,15 +20,15 @@ DPDStore.prototype.setNewListener = function(listener){
 /*
  * Listener function requires one parameter for the submitted object
  */
-DPDStore.prototype.setUpdatedListener = function(listener){
-	this.updatedListener = listener;
+DPDStore.prototype.setUpdateListener = function(listener){
+	this.updateListener = listener;
 }
 
 /*
  * Listener function requires one parameter for the submitted object
  */
-DPDStore.prototype.setDeletedListener = function(listener){
-	this.deletedListener = listener;
+DPDStore.prototype.setDeleteListener = function(listener){
+	this.deleteListener = listener;
 }
 
 DPDStore.prototype.connect = function(){
@@ -68,9 +68,9 @@ DPDStore.prototype.afterInit = function(){
 	dpd[this.storeID].on('update', function(item) {
 		console.log('update: ' + self.storeID + ' ID: ' + item.id);
 		self.items[item.id] = item;
-		if (jQuery.isFunction(self.updatedListener)){
-			console.log('informed updated listener');
-			self.updatedListener(item);
+		if (jQuery.isFunction(self.updateListener)){
+			console.log('informed update listener');
+			self.updateListener(item);
 		}	
 	});
 	
@@ -78,9 +78,9 @@ DPDStore.prototype.afterInit = function(){
 		console.log('delete: ' + self.storeID + ' ID: ' + item.id);
 		//FIXME: this is very resource hungry, since our arrays indexes are not in sequential order it has to do for now
 		self.items.splice($.inArray(item, self.items),1);
-		if (jQuery.isFunction(self.deletedListener)){
+		if (jQuery.isFunction(self.deleteListener)){
 			console.log('informed delete listener');
-			self.deletedListener(item);
+			self.deleteListener(item);
 		}
 	});
 	

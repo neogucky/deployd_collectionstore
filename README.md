@@ -1,7 +1,7 @@
 # deployd_collectionstore
 Simple collection store to handle updated / added or deleted items 
 
-This is building on the easy to use API-Framework deployd. See: https://deployd.com
+This is building on the easy to use API-Framework deployd. See: http://deployd.com
 
 It requires the following events setup in all collections meant to be used: 
 
@@ -18,7 +18,7 @@ Where COLLECTIONNAME is obviously the name of your collection. (i.e. the put-eve
 
 The store can then be used like this. It requires the collection name as an argument, optionaly you can also add a method that will be called after the asynchronous request finished.
 
-	appleStore = new Store('apples', function() { renderApples(); });
+	appleStore = new DPDStore('apples', function() { renderApples(); });
 	appleStore.connect();
 
 This will load the apples collection, store it in our appleStore and then call your local renderApples() function.
