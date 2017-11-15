@@ -73,8 +73,7 @@ DPDStore.prototype.afterInit = function(){
 	});
 	
 	dpd[this.storeID].on('delete', function(item) {
-		//FIXME: this is very resource hungry, since our arrays indexes are not in sequential order it has to do for now
-		self.items.splice($.inArray(item, self.items),1);
+		delete self.items[item.id];
 		if (jQuery.isFunction(self.deleteListener)){
 			self.deleteListener(item);
 		}
