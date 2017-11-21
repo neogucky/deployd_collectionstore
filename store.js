@@ -92,3 +92,30 @@ DPDStore.prototype.afterInit = function(){
 		this.initCallback();
 	}
 };
+
+/* 
+* this is just exposing the put function of the store (see http://docs.deployd.com/docs/collections/reference/dpd-js.html#s-.post([id], object, fn))
+*
+*	Please note, that the optional "id" property is not available here
+*/
+DPDStore.prototype.post = function(data, callback){
+	dpd[this.storeID].post(data, callback);
+};
+
+/* 
+* this is just exposing the put function of the store (see http://docs.deployd.com/docs/collections/reference/dpd-js.html#s-.put([id or query], object, fn))
+*
+*	Please note, that "id_or_query" can be both the object id or the object query as JS is not type save and does not have overloaded functions
+*/
+DPDStore.prototype.put = function(id_or_query, data, callback){
+	dpd[this.storeID].put(id_or_query, data, callback);
+};
+
+/* 
+* this is just exposing the delete function of the store (see http://docs.deployd.com/docs/collections/reference/dpd-js.html#s-.del(id or query, fn))
+*
+*	Please note, that "id_or_query" can be both the object id or the object query as JS is not type save and does not have overloaded functions
+*/
+DPDStore.prototype.del = function(id_or_query, callback){
+	dpd[this.storeID].put(id_or_query, callback);
+};
