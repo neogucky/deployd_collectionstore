@@ -60,3 +60,10 @@ It is possible to add specific parameters to the queries. This is relevant to pr
 	
 Take note, the results will be sorted descending as well, so you probably need to sort them again.
 	
+To add, update or delete items you can use the functions provided by dpd (see post, put and del:  http://docs.deployd.com/docs/collections/reference/dpd-js.html ) You don't have to remember the collection name to call 
+	
+	dpd.apples.post({...}, callback); //here you need to know that the collection is named "apples" when calling the post
+
+	appleStore.post({...}, callback) //here you work directly with the appleStore
+	
+This is not meant to be super inventive but to streamline your code, allowing to only work with the store object instead of mixing it with dpd calls.
