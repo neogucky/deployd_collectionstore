@@ -48,3 +48,22 @@ You also can add some listeners, to update your apple-table according to changes
 	appleStore.setNewListener(renderApples);
 	
 Keep in mind, that the store updates itself with every change, even if you don't have any listeners on it. This can create a massive network overhead, so you should think if this store fits your needs before using it.
+
+It is possible to add specific parameters to the queries. This is relevant to prevent bottlenecks (i.e. always loading everything). A full lsit of all parameters can be found here: http://docs.deployd.com/docs/collections/reference/querying-collections.html
+
+	//load only the 10 newest apples
+	appleStore = new DPDStore('apples', function() { renderApples(); });
+	appleStore.connect(
+		{   $sort: {dateTime: -1}, /* sort descending to not getting the 10 oldest */
+    		    $limit: 10 }
+	);
+	
+Take note, the results will be sorted descending as well, so you probably need to sort them again.
+	
+To add, update or delete items you can use the functions provided by dpd (see post, put and del:  http://docs.deployd.com/docs/collections/reference/dpd-js.html ) You don't have to remember the collection name to call 
+	
+	dpd.apples.post({...}, callback); //here you need to know that the collection is named "apples" when calling the post
+
+	appleStore.post({...}, callback) //here you work directly with the appleStore
+	
+This is not meant to be super inventive but to streamline your code, allowing to only work with the store object instead of mixing it with dpd calls.
