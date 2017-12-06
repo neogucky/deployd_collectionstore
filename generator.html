@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>Alarmliste</title>
+    <style type="text/css">
+        body {
+  background-color: #3e94ec;
+  font-family: "Roboto", helvetica, arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+        .container { width: 1400px; margin-left: auto; margin-right: auto; }
+        
+
+div.table-title {
+   display: block;
+  margin: auto;
+  padding:5px;
+  width: 100%;
+}
+
+.table-title h3 {
+   color: #fafafa;
+   font-size: 30px;
+   font-weight: 400;
+   font-style:normal;
+   font-family: "Roboto", helvetica, arial, sans-serif;
+   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+   text-transform:uppercase;
+}		
+		/*** Table Styles **/
+
+.table-fill {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  margin: auto;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+ 
+th {
+  color:#D5DDE5;;
+  background:#1b1e24;
+  border-bottom:4px solid #9ea7af;
+  border-right: 1px solid #343a45;
+  font-size:18px;
+  font-weight: 100;
+  padding:24px;
+  text-align:left;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  vertical-align:middle;
+}
+
+th:first-child {
+  border-top-left-radius:3px;
+}
+ 
+th:last-child {
+  border-top-right-radius:3px;
+  border-right:none;
+}
+  
+tr {
+  border-top: 1px solid #C1C3D1;
+  border-bottom-: 1px solid #C1C3D1;
+  color:#666B85;
+  font-size:16px;
+  font-weight:normal;
+  text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+}
+ 
+tr:hover td {
+  background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+}
+ 
+tr:first-child {
+  border-top:none;
+}
+
+tr:last-child {
+  border-bottom:none;
+}
+ 
+tr:nth-child(odd) td {
+  background:#EBEBEB;
+}
+ 
+tr:nth-child(odd):hover td {
+  background:#4E5066;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius:3px;
+}
+ 
+tr:last-child td:last-child {
+  border-bottom-right-radius:3px;
+}
+ 
+td {
+  background:#FFFFFF;
+  padding:20px;
+  text-align:left;
+  vertical-align:middle;
+  font-weight:300;
+  font-size:16px;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #C1C3D1;
+}
+
+td:last-child {
+  border-right: 0px;
+}
+
+th.text-left {
+  text-align: left;
+}
+
+th.text-center {
+  text-align: center;
+}
+
+th.text-right {
+  text-align: right;
+}
+
+td.text-left {
+  text-align: left;
+}
+
+td.text-center {
+  text-align: center;
+}
+
+td.text-right {
+  text-align: right;
+}
+
+a {
+	cursor: pointer!important; }
+
+#actions a {
+    padding-right: 20px;
+    display: inline-block;	}
+
+#actions a:hover {
+	font-weight: bold;
+    padding-right: 7px;
+    margin-left: -4px; }
+
+#loginWrapper{
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7); }
+	
+#loginPopup{
+	display: none;
+	position: absolute;
+    padding: 50px 100px;
+    top: 20%;
+    width: 200px;
+    left: 50%;
+    margin-left: -200px;
+	background-color: #312e2e; }
+
+#loginPopup input{
+	width: 100%;
+	margin: 5px 0; }
+	
+#loginPopup h1 {
+	color: white;
+}
+
+#loginPopup #loginError {
+	color: red;
+	font-weight: bold;
+}
+
+div.box a.button {
+	float:right;
+	padding-left: 16px; }
+	
+    </style>
+</head>
+<body>
+    <div class="container">
+		<div class="table-title">	
+			<h3>Simulation Lübeck</h3>
+		</div>
+		 <h2 id="currentDateTime"></h2>  <br>
+		 <h2 id="currentState"></h2>  
+		<div id="statusBox" class="box" style="text-size:20px; margin-top:20px;background-color: lightgrey; padding: 10px;"><span id="status"></span></div>
+		<div id="alarmBox" class="box" style="text-size:20px; margin-top:20px;background-color: lightgrey; padding: 10px;"><span id="alarms"></span></div>
+		<div id="loginBox" class="box" style="text-size:20px; margin-top:20px;background-color: lightgrey; padding: 10px;"><span id="loginText">Not logged in</span></div>
+		<div id="actions" style="margin-top:20px;"></div>
+		<div id="chart"></div>
+		
+		<div id="loginWrapper"></div>			
+		<div id="loginPopup">
+			<h1>Login</h1>
+			<p id="loginError"></p>
+			<input type="text" id="username" name = "username">
+			<input type="password" id="password" name = "password">
+			<input type="submit" id="loginButton" value = "Login">
+			<input type="submit" id="cancelButton" value = "Cancel">
+		</div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="http://d3pie.org/d3pie/d3pie.js"></script>
+	<script type="text/javascript" src="/dpd.js"></script>
+	<script type="text/javascript" src="store.js"></script>
+	<script type="text/javascript" src="dpd-session.js"></script>
+	<script type="text/javascript" src="netzDatenStrom.js"></script>
+    <script type="text/javascript" src="generator.js"></script>
+</body>
+</html>
