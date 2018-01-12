@@ -62,8 +62,10 @@ Take note, the results will be sorted descending as well, so you probably need t
 	
 To add, update or delete items you can use the functions provided by dpd (see post, put and del:  http://docs.deployd.com/docs/collections/reference/dpd-js.html ) You don't have to remember the collection name to call 
 	
-	dpd.apples.post({...}, callback); //here you need to know that the collection is named "apples" when calling the post
-
-	appleStore.post({...}, callback) //here you work directly with the appleStore
+	appleStore.put({...}, callback) //puts (creates) data in {...} object to the api-database
+	appleStore.del("91c621a3026ca8ef", callback) //deletes the object with the id 91c621a3026ca8ef (you can also use querys, see documentation)
+	appleStore.post("91c621a3026ca8ef", {...}, callback) /post data in {...} object to the object with the ID 91c621a3026ca8ef
 	
 This is not meant to be super inventive but to streamline your code, allowing to only work with the store object instead of mixing it with dpd calls.
+
+Best practise is to never change the content of store.items but to add / edit elements with the put / del / post functions. All changes will be mirrored back to your stores and you can react to them in your listeners.
